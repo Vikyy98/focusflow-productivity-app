@@ -1,15 +1,13 @@
 import { useReducer, type ReactNode } from "react";
-import { AppContext } from "./AppContext";
+import { TaskContext } from "./TaskContext";
 
 type TaskStatus = "completed" | "pending";
-type Theme = "light" | "dark";
 
-export interface AppState {
+export interface TaskState {
   tasks: Task[];
-  notes: Note[];
   taskCompletionDetails: TaskCompletionDetails;
-  isTimerRunning: boolean;
-  theme: Theme;
+  editTask: Task | null;
+  isEditing: boolean;
 }
 
 export interface TaskCompletionDetails {
@@ -23,13 +21,7 @@ export interface Task {
   status: TaskStatus;
 }
 
-export interface Note {
-  id: number;
-  title: string;
-  status: TaskStatus;
-}
-
-const initialState: AppState = {
+const initialState: TaskState = {
   tasks: [
     {
       id: 1,
@@ -37,29 +29,25 @@ const initialState: AppState = {
       status: "pending",
     },
   ],
-  notes: [],
   taskCompletionDetails: {
     completedCount: 0,
     totalCount: 0,
   },
-  isTimerRunning: false,
-  theme: "light",
+  editTask: null,
+  isEditing: false,
 };
 
 export type Action =
   | { type: "ADD_TASK"; payload: Task }
-  | { type: "ADD_NOTE"; payload: Note }
-  | { type: "TOGGLE_TASK"; payload: number };
+  | { type: "TOGGLE_TASK"; payload: number }
+  | { type: "SELECT_EDIT"; payload: Task | null }
+  | { type: "EDIT_TASK"; payload: Task | null }
+  | { type: "DELETE_TASK"; payload: number };
 
-const appReducer = (state: AppState, action: Action): AppState => {
+const appReducer = (state: TaskState, action: Action): TaskState => {
   const { type, payload } = action;
 
   switch (type) {
-    case "ADD_NOTE":
-      return {
-        ...state,
-        notes: [...state.notes, payload],
-      };
     case "ADD_TASK":
       return {
         ...state,
@@ -72,6 +60,25 @@ const appReducer = (state: AppState, action: Action): AppState => {
           t.id === payload ? { ...t, status: "completed" } : t
         ),
       };
+    case "SELECT_EDIT":
+      return {
+        ...state,
+        editTask: payload,
+        isEditing: true,
+      };
+    case "EDIT_TASK":
+      return {
+        ...state,
+        tasks: state.tasks.map((t: Task) =>
+          t.id === payload?.id ? { ...t, title: payload.title } : t
+        ),
+        isEditing: false,
+      };
+    case "DELETE_TASK":
+      return {
+        ...state,
+        tasks: state.tasks.filter((t: Task) => t.id !== payload),
+      };
     default:
       return {
         ...state,
@@ -79,11 +86,11 @@ const appReducer = (state: AppState, action: Action): AppState => {
   }
 };
 
-export const AppProvider = ({ children }: { children: ReactNode }) => {
+export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
   return (
-    <AppContext.Provider value={{ state, dispatch }}>
+    <TaskContext.Provider value={{ state, dispatch }}>
       {children}
-    </AppContext.Provider>
+    </TaskContext.Provider>
   );
 };

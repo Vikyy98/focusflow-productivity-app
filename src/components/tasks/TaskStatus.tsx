@@ -1,7 +1,7 @@
-import useAppContext from "../../contexts/useContext";
+import useTaskContext from "../../contexts/tasks/useTaskContext";
 
 const TaskStatus = () => {
-  const { state } = useAppContext();
+  const { state } = useTaskContext();
   const completedTaskCount = state.tasks.filter(
     (r) => r.status === "completed"
   )?.length;

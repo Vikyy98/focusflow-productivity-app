@@ -1,19 +1,34 @@
-import { useState } from "react";
-import useAppContext from "../../contexts/useContext";
-import type { Task } from "../../contexts/AppProvider";
+import useTaskContext from "../../contexts/tasks/useTaskContext";
+import type { Task } from "../../contexts/tasks/TaskProvider";
+import { useEffect, useState } from "react";
 
 const AddTask = () => {
   const [task, setTask] = useState("");
-  const { state, dispatch } = useAppContext();
-  const handleAddTask = () => {
-    const newTask: Task = {
-      id: state.tasks.length + 1,
-      title: task,
-      status: "pending",
-    };
-    dispatch({ type: "ADD_TASK", payload: newTask });
+  const { state, dispatch } = useTaskContext();
+  const handleAddOrEditTask = () => {
+    if (state.isEditing && state.editTask) {
+      const updatedTask: Task = {
+        id: state.editTask.id,
+        title: task,
+        status: state.editTask.status,
+      };
+      dispatch({ type: "EDIT_TASK", payload: updatedTask });
+    } else {
+      const newTask: Task = {
+        id: state.tasks.length + 1,
+        title: task,
+        status: "pending",
+      };
+      dispatch({ type: "ADD_TASK", payload: newTask });
+    }
     setTask("");
   };
+
+  useEffect(() => {
+    if (state.isEditing) {
+      setTask(state.editTask?.title || "");
+    }
+  }, [state.isEditing, state.editTask?.title]);
 
   return (
     <div className="flex gap-2 mb-6">
@@ -25,10 +40,10 @@ const AddTask = () => {
         onChange={(e) => setTask(e.target.value)}
       />
       <button
-        onClick={handleAddTask}
+        onClick={handleAddOrEditTask}
         className="bg-blue-600 hover:bg-blue-700 transition px-4 py-2 rounded-md text-sm font-medium"
       >
-        Add
+        {state.isEditing ? "Edit Task" : "Add Task"}
       </button>
     </div>
   );
