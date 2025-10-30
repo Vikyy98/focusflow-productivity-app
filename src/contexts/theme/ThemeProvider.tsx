@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { ThemeContext } from "./ThemeContext";
 
 export interface ThemeState {
@@ -7,8 +7,9 @@ export interface ThemeState {
 
 export type ThemeAction = { type: "SET_THEME"; payload: "light" | "dark" };
 
+const storedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
 const initialState: ThemeState = {
-  theme: "light",
+  theme: storedTheme || "light",
 };
 
 const themeReducer = (state: ThemeState, action: ThemeAction): ThemeState => {
@@ -22,6 +23,12 @@ const themeReducer = (state: ThemeState, action: ThemeAction): ThemeState => {
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(themeReducer, initialState);
+
+  // Persist theme
+  useEffect(() => {
+    localStorage.setItem("theme", state.theme);
+  }, [state.theme]);
+
   return (
     <ThemeContext.Provider value={{ state, dispatch }}>
       {children}

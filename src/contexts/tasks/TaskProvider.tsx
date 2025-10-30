@@ -25,7 +25,7 @@ const initialState: TaskState = {
   tasks: [],
   taskCompletionDetails: {
     completedCount: 0,
-    totalCount: 1,
+    totalCount: 0,
   },
   editTask: null,
   mode: "view",
