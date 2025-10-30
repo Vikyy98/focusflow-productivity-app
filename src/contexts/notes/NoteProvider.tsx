@@ -3,8 +3,7 @@ import { NoteContext } from "./NoteContext";
 
 export interface NoteState {
   notes: Note[];
-  isAddClicked: boolean;
-  isEditClicked: boolean;
+  mode: "view" | "add" | "edit";
   editNoteDetails: Note | null;
 }
 
@@ -15,34 +14,16 @@ export interface Note {
 }
 
 export type NoteAction =
+  | { type: "SET_MODE"; payload: "view" | "add" | "edit" }
   | { type: "ADD_NOTE"; payload: Note }
   | { type: "SELECT_EDIT"; payload: Note }
   | { type: "EDIT_NOTE"; payload: Note }
   | { type: "SHOW_CREATE_NOTE"; payload: boolean }
   | { type: "DELETE_NOTE"; payload: number };
 
-const initialNoteData: Note[] = [
-  {
-    id: 1,
-    title: "Meeting Notes",
-    description: "Prepare slides for client call.",
-  },
-  {
-    id: 2,
-    title: "Grocery List",
-    description: "Milk, bread, fruits, and eggs.",
-  },
-  {
-    id: 3,
-    title: "Project Ideas",
-    description: "Create a habit tracker or task manager app.",
-  },
-];
-
 const initialState: NoteState = {
-  notes: initialNoteData,
-  isAddClicked: false,
-  isEditClicked: false,
+  notes: [],
+  mode: "view",
   editNoteDetails: null,
 };
 
@@ -54,18 +35,16 @@ const notesReducer = (state: NoteState, action: NoteAction): NoteState => {
         ...state,
         notes: [...state.notes, payload],
       };
-    case "SHOW_CREATE_NOTE":
+    case "SET_MODE":
       return {
         ...state,
-        isEditClicked: false,
-        isAddClicked: payload,
+        mode: payload,
       };
     case "SELECT_EDIT":
       return {
         ...state,
         editNoteDetails: payload,
-        isEditClicked: true,
-        isAddClicked: false,
+        mode: "edit",
       };
     case "EDIT_NOTE":
       return {
@@ -79,9 +58,8 @@ const notesReducer = (state: NoteState, action: NoteAction): NoteState => {
               }
             : note
         ),
-        isEditClicked: false,
-        isAddClicked: true,
         editNoteDetails: null,
+        mode: "add",
       };
     case "DELETE_NOTE":
       return {

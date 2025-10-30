@@ -6,16 +6,16 @@ const AddTask = () => {
   const [task, setTask] = useState("");
   const { state, dispatch } = useTaskContext();
   const handleAddOrEditTask = () => {
-    if (state.isEditing && state.editTask) {
+    if (state.mode === "edit" && state.editTask) {
       const updatedTask: Task = {
         id: state.editTask.id,
         title: task,
         status: state.editTask.status,
       };
       dispatch({ type: "EDIT_TASK", payload: updatedTask });
-    } else {
+    } else if (state.mode === "add" && task.trim() !== "") {
       const newTask: Task = {
-        id: state.tasks.length + 1,
+        id: Date.now(),
         title: task,
         status: "pending",
       };
@@ -25,10 +25,10 @@ const AddTask = () => {
   };
 
   useEffect(() => {
-    if (state.isEditing) {
+    if (state.mode === "edit") {
       setTask(state.editTask?.title || "");
     }
-  }, [state.isEditing, state.editTask?.title]);
+  }, [state.mode, state.editTask?.title]);
 
   return (
     <div className="flex gap-2 mb-6">
@@ -43,7 +43,7 @@ const AddTask = () => {
         onClick={handleAddOrEditTask}
         className="bg-blue-600 hover:bg-blue-700 transition px-4 py-2 rounded-md text-sm font-medium"
       >
-        {state.isEditing ? "Edit Task" : "Add Task"}
+        {state.mode === "edit" ? "Edit Task" : "Add Task"}
       </button>
     </div>
   );

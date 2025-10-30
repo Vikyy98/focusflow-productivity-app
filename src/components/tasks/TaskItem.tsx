@@ -6,9 +6,11 @@ const TaskItem = ({ id, title }: Task) => {
   const { state, dispatch } = useTaskContext();
 
   const handleEditTask = (id: number) => {
-    const editingTask =
-      state.tasks.find((t) => (t.id === id ? t : null)) || null;
-    dispatch({ type: "SELECT_EDIT", payload: editingTask });
+    const editingTask = state.tasks.find((t) => (t.id === id ? t : null));
+
+    if (editingTask) {
+      dispatch({ type: "SELECT_EDIT", payload: editingTask });
+    }
   };
 
   return (

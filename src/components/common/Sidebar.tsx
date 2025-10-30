@@ -21,9 +21,6 @@ const Sidebar = () => {
         <NavLink to="/timer" className={linkClasses}>
           Timer
         </NavLink>
-        <NavLink to="/settings" className={linkClasses}>
-          Settings
-        </NavLink>
       </nav>
     </aside>
   );

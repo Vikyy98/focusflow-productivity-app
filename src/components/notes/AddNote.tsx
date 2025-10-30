@@ -8,16 +8,16 @@ const AddNote = () => {
   const { state, dispatch } = useNoteContext();
 
   const handleSaveNote = () => {
-    if (state.isAddClicked) {
+    if (state.mode === "add") {
       const newNote: Note = {
-        id: state.notes.length + 1,
+        id: Date.now(),
         title: title,
         description: description,
       };
       dispatch({ type: "ADD_NOTE", payload: newNote });
-    } else if (state.isEditClicked) {
+    } else if (state.mode === "edit" && state.editNoteDetails) {
       const updatedNote: Note = {
-        id: state.editNoteDetails?.id || 0,
+        id: state.editNoteDetails?.id,
         title: title,
         description: description,
       };
@@ -28,16 +28,18 @@ const AddNote = () => {
   };
 
   useEffect(() => {
-    if (state.isEditClicked) {
+    if (state.mode === "edit") {
       setTitle(state.editNoteDetails?.title || "");
       setDescription(state.editNoteDetails?.description || "");
+      console.log("Editing note:", state.editNoteDetails);
     }
-  }, [state.isEditClicked, state.editNoteDetails]);
+  }, [state.mode, state.editNoteDetails]);
 
   return (
     <div className="bg-gray-800 p-4 rounded-xl mb-6 shadow-lg">
       <h3 className="text-lg font-semibold mb-3 text-gray-100">
-        Create a new note
+        {(state.mode === "add" || state.mode == "view") && "Create a new note"}
+        {state.mode === "edit" && "Edit note"}
       </h3>
       <div className="flex flex-col gap-3">
         <input

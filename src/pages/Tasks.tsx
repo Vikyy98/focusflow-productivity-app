@@ -2,18 +2,16 @@ import { FaPlus } from "react-icons/fa";
 import TaskList from "../components/tasks/TaskList";
 import AddTask from "../components/tasks/AddTask";
 import TaskStatus from "../components/tasks/TaskStatus";
-import { useState } from "react";
-
+import useTaskContext from "../contexts/tasks/useTaskContext";
 const Tasks = () => {
-  const [showAddTask, setShowAddTask] = useState(false);
-
+  const { state, dispatch } = useTaskContext();
   return (
     <div className="p-6 text-gray-100">
       {/* Page Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl text-gray-700 font-semibold">Tasks</h2>
         <button
-          onClick={() => setShowAddTask(!showAddTask)}
+          onClick={() => dispatch({ type: "SET_MODE", payload: "add" })}
           className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 transition px-4 py-2 rounded-md text-sm font-medium"
         >
           <FaPlus size={16} /> Add Task
@@ -29,7 +27,7 @@ const Tasks = () => {
         <TaskStatus />
       </div>
       {/* Add Task Input */}
-      {showAddTask && <AddTask />}
+      {(state.mode === "add" || state.mode === "edit") && <AddTask />}
       {/* Task List */}
       <TaskList />
     </div>

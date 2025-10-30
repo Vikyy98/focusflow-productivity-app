@@ -7,7 +7,7 @@ export interface TaskState {
   tasks: Task[];
   taskCompletionDetails: TaskCompletionDetails;
   editTask: Task | null;
-  isEditing: boolean;
+  mode: "view" | "add" | "edit";
 }
 
 export interface TaskCompletionDetails {
@@ -22,26 +22,21 @@ export interface Task {
 }
 
 const initialState: TaskState = {
-  tasks: [
-    {
-      id: 1,
-      title: "Buy Show",
-      status: "pending",
-    },
-  ],
+  tasks: [],
   taskCompletionDetails: {
     completedCount: 0,
-    totalCount: 0,
+    totalCount: 1,
   },
   editTask: null,
-  isEditing: false,
+  mode: "view",
 };
 
 export type Action =
+  | { type: "SET_MODE"; payload: "view" | "add" | "edit" }
   | { type: "ADD_TASK"; payload: Task }
+  | { type: "SELECT_EDIT"; payload: Task }
+  | { type: "EDIT_TASK"; payload: Task }
   | { type: "TOGGLE_TASK"; payload: number }
-  | { type: "SELECT_EDIT"; payload: Task | null }
-  | { type: "EDIT_TASK"; payload: Task | null }
   | { type: "DELETE_TASK"; payload: number };
 
 const appReducer = (state: TaskState, action: Action): TaskState => {
@@ -52,6 +47,10 @@ const appReducer = (state: TaskState, action: Action): TaskState => {
       return {
         ...state,
         tasks: [...state.tasks, payload],
+        taskCompletionDetails: {
+          ...state.taskCompletionDetails,
+          totalCount: state.taskCompletionDetails.totalCount + 1,
+        },
       };
     case "TOGGLE_TASK":
       return {
@@ -59,12 +58,21 @@ const appReducer = (state: TaskState, action: Action): TaskState => {
         tasks: state.tasks.map((t: Task) =>
           t.id === payload ? { ...t, status: "completed" } : t
         ),
+        taskCompletionDetails: {
+          ...state.taskCompletionDetails,
+          completedCount: state.taskCompletionDetails.completedCount + 1,
+        },
+      };
+    case "SET_MODE":
+      return {
+        ...state,
+        mode: payload,
       };
     case "SELECT_EDIT":
       return {
         ...state,
         editTask: payload,
-        isEditing: true,
+        mode: "edit",
       };
     case "EDIT_TASK":
       return {
@@ -72,17 +80,24 @@ const appReducer = (state: TaskState, action: Action): TaskState => {
         tasks: state.tasks.map((t: Task) =>
           t.id === payload?.id ? { ...t, title: payload.title } : t
         ),
-        isEditing: false,
+        editTask: null,
+        mode: "add",
       };
     case "DELETE_TASK":
       return {
         ...state,
         tasks: state.tasks.filter((t: Task) => t.id !== payload),
+        taskCompletionDetails: {
+          ...state.taskCompletionDetails,
+          completedCount:
+            state.taskCompletionDetails.completedCount != 0
+              ? state.taskCompletionDetails.completedCount - 1
+              : 0,
+          totalCount: state.taskCompletionDetails.totalCount - 1,
+        },
       };
     default:
-      return {
-        ...state,
-      };
+      return state;
   }
 };
 
