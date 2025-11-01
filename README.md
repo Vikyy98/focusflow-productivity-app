@@ -1,73 +1,87 @@
-# React + TypeScript + Vite
+# 🧠 FocusFlow – Modern Productivity Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern productivity app built using **React**, **TypeScript**, and **Tailwind CSS (v4)**. FocusFlow helps you stay organized with **Notes**, **Tasks**, and a **Pomodoro Timer**, all inside a clean, responsive, theme-adaptive dashboard.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## React Compiler
+* **🧩 Modular Dashboard:** Combines Notes, Tasks, and Timer in one place.
+* **✅ Task Management:** Full CRUD (Create, Read, Update, Delete) for tasks, including marking complete.
+* **📝 Notes:** Simple notes with edit & update capability.
+* **⏱️ Pomodoro Timer:** Focus Timer with a circular progress animation.
+* **🌗 Theme Adaptive:** Dark / Light theme with smooth transitions.
+* **🧠 Global State:** Context API + Reducer pattern for robust state management.
+* **💾 Persistent Architecture:** Ready for state persistence (e.g., local storage).
+* **📱 Responsive Design:** Fully mobile-friendly using Tailwind breakpoints.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 💻 Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+| Category | Tool |
+| :--- | :--- |
+| **Frontend** | React 19 + TypeScript |
+| **Styling** | Tailwind CSS v4 |
+| **Routing** | React Router DOM v7 |
+| **State Management** | React Context + useReducer |
+| **Icons** | React Icons (FontAwesome) |
+| **Build Tool** | Vite |
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## ⚙️ Key Concepts & Design
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 🧠 Concepts Used
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+* `useReducer`: For complex state logic (Notes, Tasks) for predictable state transitions.
+* `useCallback / useMemo`: To optimize performance and prevent unnecessary re-renders.
+* **Context API**: Global state management per module (Notes, Tasks, Timer).
+* **Tailwind Dark Mode**: Utilizes `dark:` variants and `document.documentElement.classList` for toggling.
+* **TypeScript Interfaces**: Ensures safe props and state types across the application.
+* **Responsive Design**: Built using Tailwind breakpoints (`sm`, `md`, `lg`, `xl`).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 🎨 UI/UX Highlights
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+* **Clean Design:** Tailwind v4 for a clean, modern, and consistent aesthetic.
+* **Smooth Theming:** Dark/light theme with smooth color transitions.
+* **Architecture:** Clear, modular component structure for maintainability.
+* **Dashboard:** Modern, minimal, and intuitive layout.
+* **Focus Timer:** Engaging Pomodoro Timer with an animated SVG circle progress bar.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Ensure you have **Node.js** and **npm** installed on your machine.
+
+### Installation
+
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/](https://github.com/)<YOUR_USERNAME>/FocusFlow.git
+    ```
+2.  **Navigate to the project directory:**
+    ```bash
+    cd FocusFlow
+    ```
+3.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+4.  **Start the development server:**
+    ```bash
+    npm run dev
+    ```
+
+The application should now be running locally, typically at `http://localhost:5173`.
+
+---
+
+## 🤝 Author
+
+**Vigneshwaran**
+* Full-Stack Developer (C# / .NET Core / React / TypeScript)
+* 📍 Passionate about building clean, scalable web apps.
