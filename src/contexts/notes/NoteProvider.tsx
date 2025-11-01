@@ -66,6 +66,7 @@ const notesReducer = (state: NoteState, action: NoteAction): NoteState => {
         ...state,
         notes: state.notes.filter((note) => note.id !== payload),
         editNoteDetails: null,
+        mode: "add",
       };
     default:
       return state;

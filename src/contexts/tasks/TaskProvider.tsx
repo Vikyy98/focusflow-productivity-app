@@ -87,6 +87,8 @@ const appReducer = (state: TaskState, action: Action): TaskState => {
       return {
         ...state,
         tasks: state.tasks.filter((t: Task) => t.id !== payload),
+        editTask: null,
+        mode: "add",
         taskCompletionDetails: {
           ...state.taskCompletionDetails,
           completedCount:

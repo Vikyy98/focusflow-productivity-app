@@ -8,7 +8,7 @@ const AddNote = () => {
   const { state, dispatch } = useNoteContext();
 
   const handleSaveNote = () => {
-    if (state.mode === "add") {
+    if (state.mode === "add" || state.mode === "view") {
       const newNote: Note = {
         id: Date.now(),
         title,
@@ -31,6 +31,9 @@ const AddNote = () => {
     if (state.mode === "edit") {
       setTitle(state.editNoteDetails?.title || "");
       setDescription(state.editNoteDetails?.description || "");
+    } else {
+      setTitle("");
+      setDescription("");
     }
   }, [state.mode, state.editNoteDetails]);
 

@@ -14,7 +14,10 @@ const AddTask = () => {
         status: state.editTask.status,
       };
       dispatch({ type: "EDIT_TASK", payload: updatedTask });
-    } else if (state.mode === "add" && task.trim() !== "") {
+    } else if (
+      (state.mode === "add" || state.mode == "view") &&
+      task.trim() !== ""
+    ) {
       const newTask: Task = {
         id: Date.now(),
         title: task.trim(),
@@ -28,6 +31,8 @@ const AddTask = () => {
   useEffect(() => {
     if (state.mode === "edit") {
       setTask(state.editTask?.title || "");
+    } else {
+      setTask("");
     }
   }, [state.mode, state.editTask?.title]);
 
